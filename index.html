@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <title>Javascript Calculator</title>
+ 
+  <!-- styles -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.4.0/css/font-awesome.min.css" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.2.0/animate.min.css"> 
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+
+<!-- Main Stylesheet -->
+<link href="css/index.css" rel="stylesheet" />
+<link href="js/index.js" rel="javascript" />
+<link href="js/calc.js" rel="javascript" />
+
+<!-- style -->
+<style>
+ 
+#header {
+  text-decoration: none;
+  box-shadow:none;
+}
+
+
+.display-4 {
+  font-size: calc(1.475rem + 2.7vw);
+  font-weight: 300;
+  box-shadow:none;
+ 
+  }
+
+  h1 {
+    text-decoration: none;
+    font-size: 50px;
+    color: #131313;
+    letter-spacing: 0.05em;
+    box-shadow:none;
+    text-shadow: none;
+   
+    }
+
+   
+    p {
+      display: block;
+      margin-block-start: 1em;
+      margin-block-end: 1em;
+      margin-inline-start: 0px;
+      margin-inline-end: 0px;
+      box-shadow:none;
+      
+
+    }
+      .text-center {
+      text-align: center!important;
+      box-shadow:none;
+      }
+
+  /* END ABOVE HEADER */
+
+  * {
+    padding: auto;
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    
+  }
+
+body {
+	/* background: rgb(169, 168, 168); */
+	-moz-user-select: none;
+	-khtml-user-select: none;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+}
+
+#calculator {
+	position: relative;
+	border-radius: 7px;
+	margin: auto;
+	margin-top: 20px;
+	display: block;
+	height: auto;
+	width: 278px;
+	background-color: rgb(202, 201, 201); /* calculator background */
+  /* background: #595858; */
+	font-size: 0.8em;
+	padding: 5px;
+	max-width: 320px;
+}
+
+#calculator:before,
+#calculator:after {
+	content: '';
+	position: absolute;
+	z-index: -1;
+	-webkit-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+	-moz-box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+	box-shadow: 0 0 20px rgba(0, 0, 0, 0.8);
+	top: 10px;
+	bottom: 10px;
+	left: 0;
+	right: 0;
+	-moz-border-radius: 100px / 10px;
+	border-radius: 100px / 10px;
+}
+
+#calculator:after {
+	right: 10px;
+	left: auto;
+	-webkit-transform: skew(8deg) rotate(3deg);
+	-moz-transform: skew(8deg) rotate(3deg);
+	-ms-transform: skew(8deg) rotate(3deg);
+	-o-transform: skew(8deg) rotate(3deg);
+	transform: skew(8deg) rotate(3deg);
+}
+
+#secondaryDisplay {
+	position: absolute;
+	top: 3px;
+	right: 10px;
+}
+
+#display {
+	width: 100%;
+	padding: 15px 0px;
+	text-align: right;
+	font-size: 2.5em;
+	font-family: 'Oxygen Mono', monospace;
+	background: inherit;
+	color: black;
+}
+
+button {
+	width: 60px;
+	height: 60px;
+	margin: 4px 2px;
+	outline: none;
+	border: none;
+	background: rgb(241, 240, 240); /* button background */
+  /* background: rgb(223, 223, 223); */
+	color: black;
+	border-radius: 5px;
+	font-size: 1.4em;
+}
+
+button:active {
+	background: #d7d6d6;
+}
+
+button:nth-child(2) {
+	margin-left: 205px;
+	display: block;
+	background: #ef4a49;
+	color: white;
+}
+
+button:nth-child(2):active {
+	background: #a96361;
+}
+
+button:nth-child(6),
+button:nth-child(10),
+button:nth-child(14),
+button:nth-child(17),
+button:nth-child(18) {
+	background: #079f7c; /* operators button background */
+	color: white;
+}
+
+button:nth-child(6):active,
+button:nth-child(10):active,
+button:nth-child(14):active,
+button:nth-child(17):active,
+button:nth-child(18):active {
+	background: #218d84;
+}
+
+footer {
+	position: absolute;
+	bottom: 0;
+	padding: 20px;
+	width: 100%;
+	text-align: center;
+  box-shadow:none;
+}
+
+</style>
+
+<!-- scripts -->
+<script>
+  let trailingResult = 0;
+let operationOptions = ['divide', 'multiply', 'subtract', 'add'];
+let workingOperation = "";
+
+function updateDisplay(input) {
+  let display = document.getElementById("display");
+  let secondaryDisplay = document.getElementById("secondaryDisplay");
+
+  if (display.innerHTML === "0" && operationOptions.indexOf(input) === -1) {
+    if (input === "decimal") {
+      display.innerHTML = "0.";
+    } else if (input === "negative-value") {
+      if (display.innerHTML.indexOf("-1") === -1) {
+        display.innerHTML = "-" + display.innerHTML
+      } else if (display.innerHTML.indexOf("-1" > -1)) {
+        display.innerHTML = display.innerHTML.slice(1, display.innerHTML.length);
+      }
+    } else {
+      display.innerHTML = input;
+    }
+  } else if (operationOptions.indexOf(input) >= 0) {
+    // console.log("Dealing with a operation");
+
+    if (trailingResult === display.innerHTML) {
+      // Operand button pressed twice exeception
+      workingOperation = input;
+    } else if (workingOperation === "") {
+      // Dealing without an operand
+      workingOperation = input;
+      trailingResult = display.innerHTML;
+      secondaryDisplay.innerHTML = trailingResult;
+      display.innerHTML = 0;
+    } else {
+      // Dealing with a set operand
+      // console.log(display.innerHTML, " Dealing with set operand");
+      trailingResult = calculate(trailingResult, display.innerHTML, workingOperation);
+      secondaryDisplay.innerHTML = trailingResult;
+      display.innerHTML = 0;
+      workingOperation = input;
+    }
+  } else if (input === "equals") {
+    display.innerHTML = calculate(trailingResult, display.innerHTML, workingOperation);
+    trailingResult = 0;
+    workingOperation = "";
+    secondaryDisplay.innerHTML = trailingResult;
+  } else if (input === "decimal") {
+    // console.log('decimal clicked');
+    if (display.innerHTML.indexOf(".") === -1) {
+      display.innerHTML += ".";
+    }
+    // console.log("decimal skipped because decimal already in number.");
+  } else if (input === "negative-value") {
+    // console.log("negative-value selected");
+    if (display.innerHTML.indexOf("-1") === -1) {
+      display.innerHTML = "-" + display.innerHTML
+    } else if (display.innerHTML.indexOf("-1" > -1)) {
+      display.innerHTML = display.innerHTML.slice(1, display.innerHTML.length);
+    }
+  } else {
+    display.innerHTML += input;
+  }
+  // 5 - 2 = / 2 =
+  // console.log(trailingResult, "<= trailingResult", display.innerHTML, " <= display.innerHTML", workingOperation, " <= workingOperation");
+}
+
+function clearDisplay() {
+  let display = document.getElementById("display");
+  let secondaryDisplay = document.getElementById("secondaryDisplay");
+  trailingResult = 0;
+  display.innerHTML = 0;
+  secondaryDisplay.innerHTML = trailingResult;
+}
+
+function calculate(firstNumber, secondNumber, operation) {
+  let result;
+  firstNumber = parseFloat(firstNumber);
+  secondNumber = parseFloat(secondNumber);
+  switch(operation) {
+    case "add":
+      // console.log("add calculated")
+      result = firstNumber + secondNumber;
+      break;
+    case "subtract":
+      // console.log("subtract calculated")
+      result = firstNumber - secondNumber;
+      break;
+    case "multiply":
+      // console.log("multiply calculated")
+      result = firstNumber * secondNumber;
+      break;
+    case "divide":
+      // console.log("divide calculated")
+      result = firstNumber / secondNumber;
+      break;
+    default:
+      console.log("Calculate switch statement missed something");
+  }
+  return result.toString();
+}
+
+
+</script>
+</head>
+<body>
+
+
+    <!-- Header Title -->
+    <section id="header">
+      <div class="container">
+    <header class="text-center p-5 mb-5">
+      <h1 class="display-4">JavaScript Calculator</h1>
+      <p class="fst-italic text-muted">FreeCodeCamp Project. Created by <a class="text-primary" href="https://github.com/Marjory00/" target="_blank">Marjory D. Marquez</a></p>
+  </header>
+</div>
+</section>
+
+<!-- Main -->
+ 
+ 
+  <div id="calculator">
+    <div id="display"></div>
+    <button id="clear" onclick="clearDisplay()">AC</button>
+    <button id="seven" onclick="updateDisplay(7)">7</button>
+    <button id="eight" onclick="updateDisplay(8)">8</button>
+    <button id="nine" onclick="updateDisplay(9)">9</button>
+
+    <button id="divide" onclick="updateDisplay('divide')">/</button>
+    <button id="four" onclick="updateDisplay(4)">4</button>
+    <button id="five" onclick="updateDisplay(5)">5</button>
+    <button id="six" onclick="updateDisplay(6)">6</button>
+
+    <button id="multiply" onclick="updateDisplay('multiply')">*</button>
+    <button id="one" onclick="updateDisplay(1)">1</button>
+    <button id="two" onclick="updateDisplay(2)">2</button>
+    <button id="three" onclick="updateDisplay(3)">3</button>
+
+    <button id="subtract" onclick="updateDisplay('subtract')">-</button>
+    <button id="zero" onclick="updateDisplay(0)">0</button>
+    <button id="decimal" onclick="updateDisplay('decimal')">.</button>
+    <button id="equals" onclick="updateDisplay('equals')">=</button>
+    <button id="add" onclick="updateDisplay('add')">+</button>
+    <div id="secondaryDisplay"></div>
+  </div>
+  
+
+  <!-- Scripts -->
+  <script src="https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js"></script>
+</body>
+
+</html>
