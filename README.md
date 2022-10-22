@@ -3,9 +3,9 @@
 # My project solution: 
 <img width="550" alt="react-shopping-cart" src="https://i.postimg.cc/7h6Nzz4W/FCC-Javascript-calculator-img.png">
 
-# Created by <a class="text-primary" href="https://github.com/Marjory00/" target="_blank">Marjory D. Marquez</a></p>
+### Created by <a class="text-primary" href="https://github.com/Marjory00/" target="_blank">Marjory D. Marquez</a></p>
 
-# Codepen Profile: <a class="text-primary" href="https://codepen.io/Marjory00/pen/QWreLbe" target="_blank">Marjory D. Marquez</a></p>
+### Codepen Profile: <a class="text-primary" href="https://codepen.io/Marjory00/pen/QWreLbe" target="_blank">Marjory D. Marquez</a></p>
 
 
 ## Build a JavaScript Calculator
